@@ -1,0 +1,2 @@
+Copiá acá los videos de demostración en formato MP4 (H.264, 720p o 1080p).
+Ejemplo: mantenimiento.mp4 -> en data.js: video: "videos/mantenimiento.mp4"

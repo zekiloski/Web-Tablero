@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portal de Herramientas Digitales — Oncativo S.A.</title>
+  <meta name="description" content="Portal con las herramientas y aplicaciones digitales desarrolladas para Oncativo S.A.">
+
+  <!-- Tipografía Inter (si no hay internet se usa la fuente del sistema automáticamente) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+
+  <!-- Estilos del portal -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Aplica el tema (claro/oscuro) y el estado del menú ANTES de dibujar la página,
+       para evitar un "parpadeo" al cargar. -->
+  <script>
+    (function () {
+      var tema = null, colapsado = null;
+      try {
+        tema = localStorage.getItem('portal-tema');
+        colapsado = localStorage.getItem('portal-sidebar');
+      } catch (e) { /* sin acceso a localStorage: se usan los valores por defecto */ }
+      document.documentElement.setAttribute('data-theme', tema === 'oscuro' ? 'dark' : 'light');
+      if (colapsado === '1') document.documentElement.classList.add('sb-colapsado');
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- =========================================================
+       MENÚ LATERAL (sidebar)
+       ========================================================= -->
+  <aside class="sidebar" id="sidebar" aria-label="Menú principal">
+    <!-- Logo: se completa desde app.js (se configura en data.js → CONFIG.logo) -->
+    <a class="marca" id="marca" href="#/inicio" aria-label="Ir al inicio"></a>
+
+    <!-- Opciones del menú: se generan automáticamente desde data.js -->
+    <nav class="nav" id="nav"></nav>
+
+    <!-- Botón para colapsar el menú (solo en pantallas grandes) -->
+    <div class="sidebar__pie">
+      <button class="nav__item nav__item--colapsar" type="button" data-accion="colapsar" title="Colapsar / expandir menú">
+        <span data-icon="panel"></span><span class="nav__txt">Colapsar menú</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Fondo oscuro detrás del menú en celulares -->
+  <div class="capa-menu" data-accion="cerrar-menu"></div>
+
+  <!-- =========================================================
+       CONTENIDO PRINCIPAL
+       ========================================================= -->
+  <div class="principal">
+
+    <!-- Barra superior -->
+    <header class="topbar">
+      <button class="btn-ico btn-menu" type="button" data-accion="menu" aria-label="Abrir menú">
+        <span data-icon="menu"></span>
+      </button>
+
+      <h1 class="topbar__titulo" id="tituloSeccion">Inicio</h1>
+
+      <div class="buscador">
+        <span class="buscador__ico" data-icon="buscar"></span>
+        <input id="buscador" type="search" placeholder="Buscar herramienta…" autocomplete="off" aria-label="Buscar herramienta">
+        <kbd class="buscador__kbd" title="Atajo de teclado">/</kbd>
+      </div>
+
+      <div class="topbar__acciones">
+        <button class="btn-ico" id="btnTema" type="button" data-accion="tema" aria-label="Cambiar tema"></button>
+        <button class="btn-ico" id="btnPantalla" type="button" data-accion="pantalla" title="Pantalla completa" aria-label="Pantalla completa">
+          <span data-icon="maximizar"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Acá se dibuja la vista actual (Inicio o Detalle) -->
+    <main class="vista" id="vista" tabindex="-1"></main>
+
+    <footer class="pie">
+      Portal de Herramientas Digitales · <span id="pieEmpresa">Oncativo S.A.</span>
+    </footer>
+  </div>
+
+  <!-- =========================================================
+       MODO PRESENTACIÓN (diapositivas a pantalla completa)
+       ========================================================= -->
+  <div class="pres" id="presentacion" hidden tabindex="-1" role="dialog" aria-label="Modo presentación">
+    <div class="pres__barra"><div class="pres__progreso" id="presProgreso"></div></div>
+    <div class="pres__top">
+      <span class="pres__contador" id="presContador">1 / 1</span>
+      <span class="pres__ayuda">Usá las flechas ← → del teclado · Esc para salir</span>
+      <button class="pres__salir" type="button" data-accion="pres-salir">
+        <span data-icon="cerrar"></span> Salir
+      </button>
+    </div>
+    <div class="pres__escenario" id="presEscenario"></div>
+    <div class="pres__bottom">
+      <button class="pres__btn" id="presPrev" type="button" data-accion="pres-prev">
+        <span data-icon="chevronIzq"></span> Anterior
+      </button>
+      <div class="pres__puntos" id="presPuntos"></div>
+      <button class="pres__btn pres__btn--sig" id="presNext" type="button" data-accion="pres-next">
+        Siguiente <span data-icon="chevronDer"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       VISOR AMPLIADO DE CAPTURAS (lightbox)
+       ========================================================= -->
+  <div class="lightbox" id="lightbox" hidden role="dialog" aria-label="Captura ampliada">
+    <button class="lb__btn lb__cerrar" type="button" data-accion="lb-cerrar" aria-label="Cerrar"><span data-icon="cerrar"></span></button>
+    <button class="lb__btn lb__prev" type="button" data-accion="lb-prev" aria-label="Anterior"><span data-icon="chevronIzq"></span></button>
+    <figure class="lb__figura">
+      <img id="lbImg" alt="">
+      <figcaption id="lbCap"></figcaption>
+    </figure>
+    <button class="lb__btn lb__next" type="button" data-accion="lb-next" aria-label="Siguiente"><span data-icon="chevronDer"></span></button>
+  </div>
+
+  <noscript>
+    <p style="padding:2rem;font-family:sans-serif">Para ver el portal es necesario habilitar JavaScript en el navegador.</p>
+  </noscript>
+
+  <!-- Scripts: el orden importa (primero íconos y datos, al final la lógica) -->
+  <script src="js/icons.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

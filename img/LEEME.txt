@@ -1,0 +1,8 @@
+Copiá acá el logo (logo.png), las portadas y las capturas de pantalla.
+Nombres esperados por los datos de ejemplo:
+  logo.png
+  mantenimiento.png, mantenimiento-1.png ... mantenimiento-3.png
+  nuevos-desarrollos.png, nuevos-desarrollos-1.png ... -3.png
+  aviso-despachos.png, aviso-despachos-1.png, aviso-despachos-2.png
+  agente-produccion-ia.png, agente-produccion-ia-1.png, agente-produccion-ia-2.png
+Usá nombres en minúscula, sin espacios ni tildes.
